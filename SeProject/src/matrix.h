@@ -25,6 +25,8 @@ class matrix {
 	float **matr; //to use it in copying matrix
 public:
 	matrix();
+	matrix(string s);
+	matrix(int rows , int columns);
 	//void copy_matrix (matrix &m);
 	virtual ~matrix();
 	int Getrows(string s);
@@ -37,8 +39,8 @@ public:
 	matrix sub_matrix(matrix A, matrix B);
 	matrix multiply_matrix(matrix A, matrix B);
 	float** division_By_One(float** A ,int rows ,int columns);                 //Farag
-    float** partial_pivoting (float ** C ,int rows ,int i);
-	float** divide_matrix (float **A , float** B , int rows ,int columns , int n1); //added by salah :D
+        matrix partial_pivoting (matrix C ,int rows ,int i);
+	matrix divide_matrix (matrix &A , matrix&B); //added by salah :D
 	float** Transpose_matrix(float** A, int rows, int columns);
 	float** zeros_matrix(int rows, int columns);
 	float** ones_matrix(int rows, int columns);
