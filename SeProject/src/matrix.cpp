@@ -186,7 +186,7 @@ matrix matrix::sub_matrix(matrix &A, matrix& B)
 	}
 
 
-matrix matrix::multiply_matrix(matrix A, matrix B)
+matrix matrix::multiply_matrix(matrix &A, matrix &B)
 	{
 		matrix result (A.rows, A.columns);
 
