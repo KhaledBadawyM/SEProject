@@ -554,10 +554,10 @@ catch (const char * x){cout<<x<<endl;}
     }
 	M.destroy_matrix(A,  m1);   // To destroy A
 	M.destroy_matrix(B,  m2);   // To destroy B
-	for(int x =1;x<i ; x++)
+	for(int x =1;x<i ; x++)	    		
         	M.destroy_matrix(data[x],m1);
         M.destroy_matrix(data[0],m1);
-    	data.clear();
+    	data.clear(); // clear vector
 	input.close();
 
 	return 0;
