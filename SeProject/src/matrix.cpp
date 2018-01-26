@@ -174,21 +174,21 @@ matrix matrix::sub_matrix(matrix A, matrix B)
 	}
 
 
-float** matrix::multiply_matrix(float** A, float** B, int rows, int columns,int n1)
-{
-	float** result = createEmptyMatrix(rows, columns);
-
-	for (int i = 0; i < rows; i++)
+matrix matrix::multiply_matrix(matrix A, matrix B)
 	{
-		for (int j = 0; j < columns; j++)
-		{
-			for (int k = 0; k < n1; k++)
-				result[i][j] += A[i][k] * B[k][j];
-		}
-	}
+		matrix result = createEmptyMatrix(A.rows, A.columns);
 
-	return result;
-}
+		for (int i = 0; i < A.rows; i++)
+		{
+			for (int j = 0; j < B.columns; j++)
+			{
+				for (int k = 0; k < B.rows; k++)
+					result[i][j] += A[i][k] * B[k][j];
+			}
+		}
+
+		return result;
+	}
 	//////////////////////////////////partial pivoting/////////////////////////////////////////////////
 
 float** matrix::partial_pivoting (float ** C ,int rows ,int i)
