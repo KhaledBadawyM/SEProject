@@ -158,13 +158,13 @@ matrix matrix::sum_matrix(matrix A, matrix B)
 
 
 
-float** matrix::sub_matrix(float** A, float** B, int rows, int columns)
+matrix matrix::sub_matrix(matrix A, matrix B)
 	{
-		float** result = createEmptyMatrix(rows, columns);
+        matrix result = createEmptyMatrix(A.rows, A.columns);
 
-		for (int i = 0; i < rows; i++)
+		for (int i = 0; i < A.rows; i++)
 		{
-			for (int j = 0; j < columns; j++)
+			for (int j = 0; j < A.columns; j++)
 			{
 				result[i][j] = A[i][j] - B[i][j];
 			}
@@ -174,21 +174,21 @@ float** matrix::sub_matrix(float** A, float** B, int rows, int columns)
 	}
 
 
-	float** matrix::multiply_matrix(float** A, float** B, int rows, int columns,int n1)
+float** matrix::multiply_matrix(float** A, float** B, int rows, int columns,int n1)
+{
+	float** result = createEmptyMatrix(rows, columns);
+
+	for (int i = 0; i < rows; i++)
 	{
-		float** result = createEmptyMatrix(rows, columns);
-
-		for (int i = 0; i < rows; i++)
+		for (int j = 0; j < columns; j++)
 		{
-			for (int j = 0; j < columns; j++)
-			{
-				for (int k = 0; k < n1; k++)
-					result[i][j] += A[i][k] * B[k][j];
-			}
+			for (int k = 0; k < n1; k++)
+				result[i][j] += A[i][k] * B[k][j];
 		}
-
-		return result;
 	}
+
+	return result;
+}
 	//////////////////////////////////partial pivoting/////////////////////////////////////////////////
 
 float** matrix::partial_pivoting (float ** C ,int rows ,int i)
