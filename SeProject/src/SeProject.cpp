@@ -185,7 +185,8 @@ string    T2=s2;
 	while(getline(input,op))
     {
 
-       id=op.substr(0,1);
+           op.erase(std::remove(op.begin(), op.end(), ' '), op.end());
+	id=op.substr(0,1);
 	   op=op.substr(op.find("=")+1);
        vName1 = T1.substr(0,T1.find("="));
        vName2 = T2.substr(0,T2.find("="));
