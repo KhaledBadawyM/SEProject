@@ -29,11 +29,12 @@ void Error_message()
 
 int main()
 {
-	ifstream input("C:\\Users\\hp\\Desktop\\phase 2\\rightformat.txt");   //waels
+	ifstream input("rightformat.txt");   //waels
 	string s1, s2, op,vName1,vName2;
 	float** A, ** B, ** C;
+	int i=0;
 	vector <float**> data;
-	string str[]={" C'"," D'"," E'"," F'"," G'"," A'"," B'","H'","I'","J'","K'","S'","P'","L'","M'","N'"};
+	string id ;
 	map<string ,float**>mapped;
 	int negative_flag=0;
 	matrix M;
@@ -131,7 +132,7 @@ string    T2=s2;
 
 	A = M.create_matrix(m1, n1);
 	A = M.fill_matrix(s1, A, m1, n1);
-    mapped[str[5]]=A;
+    mapped["A"]=A;
 
 	//cout << "Please Enter The second Matrix In The Right Format: \t" << "like B=[1 2; 3 4]" << endl;   //insert B
 	//getline(cin, s2);    		 waelsdelete
@@ -179,11 +180,12 @@ string    T2=s2;
 
 	B = M.create_matrix(m2, n2);
 	B = M.fill_matrix(s2, B, m2, n2);
-    mapped[str[6]]=B;
+    mapped["B"]=B;
 
 	while(getline(input,op))
     {
 
+       id=op.substr(0,1);
 	   op=op.substr(op.find("=")+1);
        vName1 = T1.substr(0,T1.find("="));
        vName2 = T2.substr(0,T2.find("="));
@@ -205,12 +207,16 @@ string    T2=s2;
 
 
 
-	if(mapped[op])
+	if(op.find("'")!=-1)
     {
-        C=mapped[op];
+
+        string str =op.substr(0,1);
+        C=mapped[str];
         printf("The Transpose result=\n");
         C=M.Transpose_matrix(C,m1,n1);
         M.print_matrix(C,n1,m1);
+        data.push_back(C);
+        mapped[id]=data[0];
     }
 
 
@@ -218,6 +224,7 @@ string    T2=s2;
 	{
 
 	try{
+
 	    if ( ( m1 != m2) || (m1 ==0) || (n1 != n2))
 
 	      throw("the dimensions are not the same ,so we can't perform summition");
@@ -225,10 +232,11 @@ string    T2=s2;
 
 
 		printf("The summation result=\n");
-		C = M.sum_matrix(A, B, m1, n1);
+        C = M.sum_matrix(mapped[op.substr(0,1)] , mapped[op.substr(2,1)], m1, n1);
 		M.print_matrix(C, m1, n1);
         data.push_back(C);
-        mapped[str[0]]=data[0];}
+        mapped[id]=data[i++];
+        }
 
 	catch(const char * x) { cout<<x<<endl;}
 
@@ -247,10 +255,10 @@ string    T2=s2;
                 throw("the dimensions are not the same ,can't perform subtracting");
             }
 			printf("The subtraction result=\n");
-			C = M.sub_matrix(A , B, m1, n1);
+            C = M.sub_matrix(mapped[op.substr(0,1)], mapped[op.substr(2,1)], m1, n1);
 			M.print_matrix(C, m1, n1);
 			data.push_back(C);
-			mapped[str[1]]=data[1];
+			mapped[id]=data[i++];
               }
 
               catch(const char *x ) {cout<<x<<endl;}
@@ -265,10 +273,10 @@ string    T2=s2;
 			    throw ("can't multiply the matrices because the number of columns of the first matrix not equal to the number of rows of the second matrix ");
 		    }
                 printf("The multiplication result=\n");
-                C = M.multiply_matrix(A, B, m1, n2,n1);
+                C = M.multiply_matrix(mapped[op.substr(0,1)], mapped[op.substr(2,1)], m1,n2, n1);
                 M.print_matrix(C, m1, n2);
                 data.push_back(C);
-                mapped[str[2]]=data[2];
+                mapped[id]=data[i++];
 	         }
 
 	    catch(const char* x){cout<<x<<endl;}
@@ -279,7 +287,9 @@ string    T2=s2;
     {
 
           printf("The division by one result=\n");
-          C=M.division_By_One(A,m1,n1);
+          C = M.division_By_One( mapped[op.substr(3,1)], m1, n1);
+          data.push_back(C);
+          mapped[id]=data[i++];
           M.print_matrix(C, m1, n2);
 
 
@@ -295,10 +305,10 @@ string    T2=s2;
 
             }
                     printf("The division result=\n");
-                    C=M.divide_matrix(A,B,m2,n2,n1);
+                    C = M.divide_matrix(mapped[op.substr(0,1)], mapped[op.substr(2,1)], m1,m2, n1);
                     M.print_matrix(C, m1, n2);
                     data.push_back(C);
-                    mapped[str[3]]=data[3];
+                    mapped[id]=data[i++];
 
 	    }
 	    catch( const char *x ) {cout<<x<<endl;}
@@ -314,6 +324,7 @@ string    T2=s2;
 			C = M.zeros_matrix(t1, t2);
 			M.print_matrix(C, t1, t2);
 			data.push_back(C);
+			mapped[id]=data[i++];
 			//mapped[str[1]]=data[1];
 
 		}
@@ -328,7 +339,7 @@ string    T2=s2;
 			C = M.ones_matrix(t1, t2);
 			M.print_matrix(C, t1, t2);
 			data.push_back(C);
-			//mapped[str[1]]=data[1];
+			mapped[id]=data[i++];
 
 		}
 		else if (op.find("eye")!=-1)
@@ -341,7 +352,7 @@ string    T2=s2;
 			C = M.eye_matrix(t1, t2);
 			M.print_matrix(C, t1, t2);
 			data.push_back(C);
-			//mapped[str[1]]=data[1];
+			mapped[id]=data[i++];
 
 		}
 		else if (op.find("rand")!=-1)
@@ -354,7 +365,7 @@ string    T2=s2;
 			C = M.rand_matrix(t1, t2);
 			M.print_matrix(C, t1, t2);
 			data.push_back(C);
-			//mapped[str[1]]=data[1];
+			mapped[id]=data[i++];
 
 		}
 
@@ -362,23 +373,26 @@ string    T2=s2;
 		else if ( op.find("exp") != -1 )
 	{
           printf("The exp result=\n");
-          C=M.Exponential(A,m1,n1);
+          string str=op.substr(op.find("(")+1,1);
+          C=M.Exponential(mapped[str],m1,n1);
           M.print_matrix(C, m1, n2);
 
           data.push_back(C);
-          mapped[str[7]]=data[7];
+          mapped[id]=data[i++];
 	}
 
 	else if ( op.find("log10") != -1 )
 	{
 	    try{
           printf("The log base 10 result=\n");
-          C=M.Log_Base10(A,m1,n1,negative_flag);
+          string str=op.substr(op.find("(")+1,1);
+
+          C=M.Log_Base10(mapped[str],m1,n1,negative_flag);
                      if (negative_flag==1)
                throw("Make sure that there is not any negative element in the matrix while performing log base 10 ");
           M.print_matrix(C, m1, n2);
           data.push_back(C);
-          mapped[str[8]]=data[8];
+          mapped[id]=data[i++];
 	    }
 	    catch(const char * x ){cout<<x<<endl;}
 	}
@@ -386,12 +400,14 @@ string    T2=s2;
 	{
 	    try{
           printf("The log base 2 result=\n");
-          C=M.Log_Base2(A,m1,n1,negative_flag);
+          string str=op.substr(op.find("(")+1,1);
+
+          C=M.Log_Base2(mapped[str],m1,n1,negative_flag);
                      if (negative_flag==1)
                throw("Make sure that there is not any negative element in the matrix while performing log base 2 ");
           M.print_matrix(C, m1, n2);
           data.push_back(C);
-          mapped[str[9]]=data[9];
+          mapped[id]=data[i++];
 	    }
 	    catch (const char* x ){cout<<x<<endl;}
 	}
@@ -403,11 +419,13 @@ string    T2=s2;
 
 try{
           printf("The ln result=\n");
-          C=M.Natural_Log(A,m1,n1,negative_flag);
+                    string str=op.substr(op.find("(")+1,1);
+
+          C=M.Natural_Log(mapped[str],m1,n1,negative_flag);
           if (negative_flag==1) {throw ("Make sure all elements are positive in order to perform ln");}
           M.print_matrix(C, m1, n2);
           data.push_back(C);
-          mapped[str[10]]=data[10];
+          mapped[id]=data[i++];
 }
 
 catch (const char * x){cout<<x<<endl;}
@@ -421,12 +439,14 @@ catch (const char * x){cout<<x<<endl;}
 	{
 	    try{
           printf("The sqrt result=\n");
-          C=M.SquareRoot(A,m1,n1,negative_flag);
+          string str=op.substr(op.find("(")+1,1);
+
+         C=M.SquareRoot(mapped[str],m1,n1,negative_flag);
            if (negative_flag==1)
                throw("Make sure that there is not any negative element in the matrix while performing square root ");
           M.print_matrix(C, m1, n1);
           data.push_back(C);
-          mapped[str[11]]=data[11];
+          mapped[id]=data[i++];
 	       }
 
 	       catch (const char *x ){cout<<x<<endl;}
@@ -443,10 +463,12 @@ catch (const char * x){cout<<x<<endl;}
 	   else if ( op.find("sin") != -1 )
 	{
           printf("The sin result=\n");
-          C=M.Sin_M(A,m1,n1);
+          string str=op.substr(op.find("(")+1,1);
+
+          C=M.Sin_M(mapped[str],m1,n1);
           M.print_matrix(C, m1, n1);
           data.push_back(C);
-          mapped[str[13]]=data[13];
+          mapped[id]=data[i++];
 	}
 
 
@@ -456,10 +478,12 @@ catch (const char * x){cout<<x<<endl;}
 	   else if ( op.find("tan") != -1 )
 	{
           printf("The tan result=\n");
-          C=M.Tan_M(A,m1,n1);
+         string str=op.substr(op.find("(")+1,1);
+
+          C=M.Tan_M(mapped[str],m1,n1);
           M.print_matrix(C, m1, n1);
           data.push_back(C);
-          mapped[str[14]]=data[14];
+          mapped[id]=data[i++];
 	}
 
 //*********cosFunction**************
@@ -468,10 +492,12 @@ catch (const char * x){cout<<x<<endl;}
 	   else if ( op.find("cos") != -1 )  // waels
 	{
           printf("The cos result=\n");
-          C=M.Cos_M(A,m1,n1);
+                    string str=op.substr(op.find("(")+1,1);
+
+          C=M.Cos_M(mapped[str],m1,n1);
           M.print_matrix(C, m1, n1);
           data.push_back(C);
-          mapped[str[15]]=data[15];
+          mapped[id]=data[i++];
 	}
 
 
@@ -479,6 +505,7 @@ catch (const char * x){cout<<x<<endl;}
 
 	else if ( op.find("^") != -1 ) // waels
     {
+
         if (m1!=n1)
             {
                 printf("this matrix can not be powered \n");
@@ -504,12 +531,12 @@ catch (const char * x){cout<<x<<endl;}
                }
 		       printf("The power result=\n");
                 //M.print_matrix(C, m1, n1);
-
+          string str=op.substr(0,1);
 		       for (int i=0;i<power;++i)
-                C = M.multiply_matrix(A, C, m1,n1,n1);
+                C = M.multiply_matrix(mapped[str], C, m1,n1,n1);
                 M.print_matrix(C, m1, n1);
                 data.push_back(C);
-                mapped[str[12]]=data[12];
+                mapped[id]=data[i++];
 	}}
 
 
@@ -528,4 +555,3 @@ catch (const char * x){cout<<x<<endl;}
 
 	return 0;
 }
-
