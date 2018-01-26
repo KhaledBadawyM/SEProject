@@ -13,6 +13,25 @@ matrix::matrix() {
    	 matr=NULL;
 }
 
+matrix::matrix(string s)
+{
+
+	 this->rows=matrix::Getrows(s) ;
+     this->columns=matrix::Getcolumns(s) ;
+     this->s=s;
+   	 mat=matrix::create_matrix(rows,columns);
+   	 mat=matrix::fill_matrix(s, mat, rows, columns);
+
+}
+matrix::matrix(int rows , int columns)
+{
+
+	this->rows =rows;
+	this->columns = columns;
+	mat = matrix::createEmptyMatrix(rows, columns);
+
+}
+
 /*
 void matrix::copy_matrix(int rows,int columns,)
 {
@@ -28,7 +47,7 @@ float** matrix = new float*[rows];
 
 		for(int j=0 ;j<columns;j++)
         {
-              matrix[i][j] = m.matr[i][j];
+              matrix[i][j] = m.mat[i][j];
 
         }
 	}
@@ -143,13 +162,13 @@ float**matrix::createEmptyMatrix(int rows, int columns)
 matrix matrix::sum_matrix(matrix A, matrix B)
 {
 
-	matrix result = createEmptyMatrix(B.rows, A.columns);
+	matrix result (B.rows, A.columns);
 
 	for (int i = 0; i < A.rows; i++)
 	{
 		for (int j = 0; j < A.columns; j++)
 		{
-			result[i][j] = A[i][j] + B[i][j];
+			result.mat[i][j] = A.mat[i][j] + B.mat[i][j];
 		}
 	}
 
@@ -160,13 +179,13 @@ matrix matrix::sum_matrix(matrix A, matrix B)
 
 matrix matrix::sub_matrix(matrix A, matrix B)
 	{
-        matrix result = createEmptyMatrix(A.rows, A.columns);
+        matrix result (A.rows, A.columns);
 
 		for (int i = 0; i < A.rows; i++)
 		{
 			for (int j = 0; j < A.columns; j++)
 			{
-				result[i][j] = A[i][j] - B[i][j];
+				result.mat[i][j] = A.mat[i][j] - B.mat[i][j];
 			}
 		}
 
@@ -176,14 +195,14 @@ matrix matrix::sub_matrix(matrix A, matrix B)
 
 matrix matrix::multiply_matrix(matrix A, matrix B)
 	{
-		matrix result = createEmptyMatrix(A.rows, A.columns);
+		matrix result (A.rows, A.columns);
 
 		for (int i = 0; i < A.rows; i++)
 		{
 			for (int j = 0; j < B.columns; j++)
 			{
 				for (int k = 0; k < B.rows; k++)
-					result[i][j] += A[i][k] * B[k][j];
+					result.mat[i][j] += A.mat[i][k] * B.mat[k][j];
 			}
 		}
 
@@ -191,21 +210,23 @@ matrix matrix::multiply_matrix(matrix A, matrix B)
 	}
 	//////////////////////////////////partial pivoting/////////////////////////////////////////////////
 
-float** matrix::partial_pivoting (float ** C ,int rows ,int i)
+matrix matrix::partial_pivoting (matrix C ,int rows ,int i)
     {
+		
         float dummy ;
 
        for (int k = rows - 1; k > i; k--)
 	   {
-		  if (C[k - 1][i] < C[k][i])
+		  if (C.mat[k - 1][i] < C.mat[k][i])
 		  for (int j = 0; j < rows * 2; j++)
 		  {
-			dummy = C[k][j];
-			C[k][j] = C[k - 1][j];
-			C[k - 1][j] = dummy;
+			dummy = C.mat[k][j];
+			C.mat[k][j] = C.mat[k - 1][j];
+			C.mat[k - 1][j] = dummy;
 		  }
 	    }
-        return C;
+	   return C;
+       
      }
 
 float** matrix::division_By_One(float** A ,int rows ,int columns)
@@ -224,77 +245,84 @@ float** matrix::division_By_One(float** A ,int rows ,int columns)
 
 }
 
-float** matrix::divide_matrix (float** A , float** B , int rows ,int columns,int n1)
+matrix matrix::divide_matrix (matrix & A,matrix&B)
 	{
+    
+		if(A.rows!=columns ||B.rows!=B.columns||A.rows!=B.rows)
+            {
+                    throw("these two matrices can not be divided , the martix must be squared \n");
+
+            }
 	    ////////creating inverse///////
          int i, j, k;
 	     float r;
 
-		float** result = createEmptyMatrix(rows, columns);
+		 matrix result(B.rows,B.columns);
 
+		
               //creating larger matrix
 
-		float**  C  = createEmptyMatrix(rows, 2*columns);
+		 matrix C(B.rows, 2 * B.columns);
 
 		//filling larger matrix
 
-		for ( i=0;i<rows;i++)
+		for ( i=0;i<B.rows;i++)
         {
-            for( j=0 ;j<columns;j++)
+            for( j=0 ;j<B.columns;j++)
             {
-
-                C[i][j]=B[i][j];
+				C.mat[i][j] = B.mat[i][j];
             }
-            for(j= columns;j<2*columns;j++)
+            for(j= B.columns;j<2*B.columns;j++)
             {
-                if (j==i+rows)
-                C[i][j]=1; //filling the diagonals of identity matrix with 1
+                if (j==i+B.rows)
+                C.mat[i][j]=1; //filling the diagonals of identity matrix with 1
 
             }
         }
 
 	//////////////////////////////////diagonal matrix/////////////////////////////////////////////////
 
-	for (i = 0; i < rows; i++) //choose pivot element from every row ..row by row and make the following
+	for (i = 0; i < B.rows; i++) //choose pivot element from every row ..row by row and make the following
 	{
 
-        C=partial_pivoting(C,rows,i); //re_arrange the elements below every pivot
+       C=partial_pivoting(C,B.rows,i); //re_arrange the elements below every pivot
 
-		for (j = 0; j < rows ; j++) //iterate over all the rows row by row and make the following
+		for (j = 0; j < B.rows ; j++) //iterate over all the rows row by row and make the following
 
         if (j != i) //to not include diagonals
 		{
-			r = C[j][i] / C[i][i]; //[i][i]  eldiagonal ,
+			r= C.mat[j][i] / C.mat[i][i];
+			//r = C[j][i] / C[i][i]; //[i][i]  eldiagonal ,
 			//kol row b3mlo nae2s elrow elly fo2 mdroob f elfactor elly ysfre elly 3lgnb
 
 
-			for (k = 0; k < rows * 2; k++) //iterate over every column of a specefic row ..element by element and make this operation
-				C[j][k] -= C[i][k] * r;
+			for (k = 0; k < B.rows * 2; k++) //iterate over every column of a specefic row ..element by element and make this operation
+				C.mat[j][k] -= C.mat[i][k] * r;
         }
 
 	}
 
     //////////////////////////////////unit matrix/////////////////////////////////////////////////
-	for (i = 0; i < rows; i++)
+	for (i = 0; i < B.rows; i++)
 	{
-		r = C[i][i]; //diagonals
-		for (j = 0; j < rows * 2; j++)
-			C[i][j] = C[i][j] / r; //hdfy 2ny a5ly eldiagonals bw7aied
+		r = C.mat[i][i]; //diagonals
+		for (j = 0; j < B.rows * 2; j++)
+			C.mat[i][j] = C.mat[i][j] / r; //hdfy 2ny a5ly eldiagonals bw7aied
 
 	}
 
-	for (i = 0; i < rows; i++) //transfer the result
+	for (i = 0; i < B.rows; i++) //transfer the result
 	{
-		for (j = rows; j < rows * 2; j++) //5lly balek 2na hna ba5od elgoz2 elly 3lgnb elymin bs
-			result[i][j - rows] = C[i][j];
+		for (j = B.rows; j < B.rows * 2; j++) //5lly balek 2na hna ba5od elgoz2 elly 3lgnb elymin bs
+			result.mat[i][j - B.rows] = C.mat[i][j];
 
 	}
 
+	result = multiply_matrix(A, result);
+  
+	return result;
 
-result = multiply_matrix( A, result, rows,columns,n1);
 
-
-return result;
 	}
 
 float**matrix:: Transpose_matrix(float** A, int rows, int columns)
