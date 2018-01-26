@@ -64,16 +64,14 @@ int matrix:: Getcolumns(string s)
 		int postion = s.find("[");
 		          // if martrix is empty ... so return columns =0
 		int place=s.find(";");
+		if(place==-1)   	  // in case of 1 row
+        	 place=s.find("]");
+	
 		s1 = s.substr(postion,place-postion+1);
         columns = (count(s1.begin(), s1.end(),' ') + 1);
-
-
-
-
-
-
+	
+	
 		return columns;
-
 }
 
 float** matrix::create_matrix(int rows, int columns)     //MUST initialize all values to zero
