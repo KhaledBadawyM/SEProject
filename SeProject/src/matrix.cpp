@@ -64,10 +64,8 @@ int matrix:: Getcolumns(string s)
 		int postion = s.find("[");
 		          // if martrix is empty ... so return columns =0
 		int place=s.find(";");
-		if(place==-1)   	  // in case of 1 row
-        	 place=s.find("]");
-	
-		s1 = s.substr(postion,place-postion+1);
+		
+		s1 = s.substr(postion,place-postion);
         columns = (count(s1.begin(), s1.end(),' ') + 1);
 	
 	
