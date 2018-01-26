@@ -35,8 +35,8 @@ public:
 	void destroy_matrix(float** matrix, int rows);
 	float** fill_matrix(string s, float** A, int rows, int columns);
 	float** createEmptyMatrix(int rows, int columns);
-	matrix sum_matrix(matrix A, matrix B);
-	matrix sub_matrix(matrix A, matrix B);
+	matrix sum_matrix(matrix &A, matrix& B);
+	matrix sub_matrix(matrix &A, matrix &B);
 	matrix multiply_matrix(matrix A, matrix B);
 	float** division_By_One(float** A ,int rows ,int columns);                 //Farag
         matrix partial_pivoting (matrix C ,int rows ,int i);
