@@ -552,6 +552,8 @@ catch (const char * x){cout<<x<<endl;}
 		printf("\n\n");
 
     }
+	M.destroy_matrix(A,  m1);   // To destroy A
+	M.destroy_matrix(B,  m2);   // To destroy B
 	input.close();
 
 	return 0;
