@@ -33,14 +33,11 @@ matrix::matrix(int rows , int columns)
 }
 
 /*
-void matrix::copy_matrix(int rows,int columns,)
+void matrix::copy_matrix(matrix &m)
 {
-
 this->rows=m.rows;
 this->columns=m.columns;
-
 float** matrix = new float*[rows];
-
 	for (int i = 0; i < rows; i++)
 	{
 		matrix [i] = new float[columns];
@@ -48,15 +45,11 @@ float** matrix = new float*[rows];
 		for(int j=0 ;j<columns;j++)
         {
               matrix[i][j] = m.mat[i][j];
-
         }
 	}
+} */
 
 
-
-}
-
-*/
 matrix::~matrix() {
 	// TODO Auto-generated destructor stub
 }
@@ -159,7 +152,7 @@ float**matrix::createEmptyMatrix(int rows, int columns)
 	return result;
 }
 
-matrix matrix::sum_matrix(matrix A, matrix B)
+matrix matrix::sum_matrix(matrix &A, matrix& B)
 {
 
 	matrix result (B.rows, A.columns);
@@ -177,7 +170,7 @@ matrix matrix::sum_matrix(matrix A, matrix B)
 
 
 
-matrix matrix::sub_matrix(matrix A, matrix B)
+matrix matrix::sub_matrix(matrix &A, matrix& B)
 	{
         matrix result (A.rows, A.columns);
 
