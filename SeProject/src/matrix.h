@@ -7,18 +7,25 @@
 
 #ifndef SRC_MATRIX_H_
 #define SRC_MATRIX_H_
+#ifdef _WIN32
+#include <string.h>
+#else
+#include <strings.h>
+#endif
 #include <iostream>
 #include <stdio.h>
-#include "strings.h"
 #include <cstring>
-#include "conio.h"
+//#include "conio.h"
 #include <bits/stdc++.h>
 #include <cstdio>
+#include <cmath>
 using namespace std;
 class matrix {
 	int rows, columns;
+	float **matr; //to use it in copying matrix
 public:
 	matrix();
+	//void copy_matrix (matrix &m);
 	virtual ~matrix();
 	int Getrows(string s);
 	int Getcolumns(string s);
@@ -32,18 +39,20 @@ public:
 	float** division_By_One(float** A ,int rows ,int columns);                 //Farag
     float** partial_pivoting (float ** C ,int rows ,int i);
 	float** divide_matrix (float **A , float** B , int rows ,int columns , int n1); //added by salah :D
-	float** Transpose_matrix(float** A, int rows, int columns);	
-	float** zeros_matrix(int rows, int columns);	//torres
-	float** ones_matrix(int rows, int columns);	
-	float** eye_matrix(int rows, int columns);                      // matrix.h
-	float** rand_matrix(int rows, int columns);		
+	float** Transpose_matrix(float** A, int rows, int columns);
+	float** zeros_matrix(int rows, int columns);
+	float** ones_matrix(int rows, int columns);
+	float** eye_matrix(int rows, int columns);                       // matrix.h
+	float** rand_matrix(int rows, int columns);
 	float** Exponential(float** A ,int rows ,int columns);
-	float** Log_Base10(float** A ,int rows ,int columns);
-	float** Log_Base2(float** A ,int rows ,int columns);
-	float** Natural_Log(float** A ,int rows ,int columns);
-	float** Sin_M(float** A ,int rows ,int columns);
-	float** Cos_M(float** A ,int rows ,int columns);
+	float** Log_Base10(float** A ,int rows ,int columns,int &negative_flag);
+	float** Log_Base2(float** A ,int rows ,int columns,int &negative_flag);
+	float** Natural_Log(float** A ,int rows ,int columns,int &negative_flag);
 	float** Tan_M(float** A ,int rows ,int columns);
+    float** Cos_M(float** A ,int rows ,int columns);
+    float** Sin_M(float** A ,int rows ,int columns);
+    float** Power_the_matrix(float** A,float** B,int rows,int cloumns);
+	float** SquareRoot(float** A,int m1,int n1, int & negative_flag);
 	void print_matrix(float** A, int rows, int columns);
 };
 
