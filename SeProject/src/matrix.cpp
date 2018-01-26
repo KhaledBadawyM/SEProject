@@ -140,15 +140,14 @@ float**matrix::createEmptyMatrix(int rows, int columns)
 	return result;
 }
 
-float**matrix::sum_matrix(float** A, float** B, int rows, int columns)
+matrix matrix::sum_matrix(matrix A, matrix B)
 {
 
+	matrix result = createEmptyMatrix(B.rows, A.columns);
 
-	float** result = createEmptyMatrix(rows, columns);
-
-	for (int i = 0; i < rows; i++)
+	for (int i = 0; i < A.rows; i++)
 	{
-		for (int j = 0; j < columns; j++)
+		for (int j = 0; j < A.columns; j++)
 		{
 			result[i][j] = A[i][j] + B[i][j];
 		}
@@ -156,7 +155,6 @@ float**matrix::sum_matrix(float** A, float** B, int rows, int columns)
 
 	return result;
 }
-
 
 
 
