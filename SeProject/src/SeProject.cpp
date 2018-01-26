@@ -299,12 +299,7 @@ string    T2=s2;
     else if ( op.find("/") != -1 )
 	{
 	    try{
-
-	    if (m1 != n1 ||m2!=n2||m1!=m2)
-            {
-                    throw("these two matrices can not be divided , the martix must be squared \n");
-
-            }
+ 
                     printf("The division result=\n");
                     C = M.divide_matrix(mapped[op.substr(0,1)], mapped[op.substr(2,1)], m1,m2, n1);
                     M.print_matrix(C, m1, n2);
