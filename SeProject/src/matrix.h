@@ -39,17 +39,17 @@ public:
 	matrix sub_matrix(matrix &A, matrix &B);
 	matrix multiply_matrix(matrix &A, matrix& B);
 	float** division_By_One(float** A ,int rows ,int columns);                 //Farag
-        matrix partial_pivoting (matrix C ,int rows ,int i);
+    matrix partial_pivoting (matrix C ,int rows ,int i);
 	matrix divide_matrix (matrix &A , matrix&B); //added by salah :D
-	float** Transpose_matrix(float** A, int rows, int columns);
+	matrix Transpose_matrix(matrix &A);
 	float** zeros_matrix(int rows, int columns);
 	float** ones_matrix(int rows, int columns);
 	float** eye_matrix(int rows, int columns);                       // matrix.h
 	float** rand_matrix(int rows, int columns);
-	float** Exponential(float** A ,int rows ,int columns);
-	float** Log_Base10(float** A ,int rows ,int columns,int &negative_flag);
-	float** Log_Base2(float** A ,int rows ,int columns,int &negative_flag);
-	float** Natural_Log(float** A ,int rows ,int columns,int &negative_flag);
+	matrix  Exponential(matrix &A);
+	matrix  Log_Base10(matrix &A ,int &negative_flag);
+	matrix  Log_Base2(matrix &A ,int &negative_flag);
+	matrix  Natural_Log(matrix &A ,int &negative_flag);
 	float** Tan_M(float** A ,int rows ,int columns);
     float** Cos_M(float** A ,int rows ,int columns);
     float** Sin_M(float** A ,int rows ,int columns);
