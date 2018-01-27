@@ -57,5 +57,20 @@ public:
 	float** SquareRoot(float** A,int m1,int n1, int & negative_flag);
 	void print_matrix(float** A, int rows, int columns);
 };
-
+struct Token
+{
+   char kind;
+	double value;
+	char alpha ;
+    Token(char ch) :kind(ch), value(0) { }
+	Token(char ch, double val) :kind(ch), value(val) { }
+    Token(char alph , char ki):alpha(alph) ,kind(ki){ }
+};
+///////////////////////////////////////////////////////////
+Token get_token();
+double expression();
+double factor();
+double term();
+double eval(string) ;
+void error (string);
 #endif /* SRC_MATRIX_H_ */
