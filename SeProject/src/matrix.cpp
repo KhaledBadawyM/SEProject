@@ -659,7 +659,6 @@ case '5':
                             else if (s== "cos" )
                                              {
                                             double d =expression();
-                                            cout<<d<<"low"<<endl;
                                             d=sin(d);
                                             math_exp>>ch;
 
@@ -668,7 +667,6 @@ case '5':
                             else if (s=="tan" )
                                         {
                                           double d =expression();
-                                          cout<<d<<"low"<<endl;
                                           d=tan(d);
                                           math_exp>>ch;
 
@@ -678,7 +676,6 @@ case '5':
                             else if (s=="log" )
                                         {
                                           double d =expression();
-                                          cout<<d<<"low"<<endl;
                                           d=log(d);
                                           math_exp>>ch;
 
@@ -688,7 +685,6 @@ case '5':
                             else if (s=="sqrt" )
                                          {
                                           double d =expression();
-                                          cout<<d<<"low"<<endl;
                                           d=sqrt(d);
                                           math_exp>>ch;
 
@@ -745,7 +741,6 @@ while(true)
 		switch(t.kind)
 		{
 		case '+':
-                cout<<"here5"<<endl;
                 left += term();
                                 cout<<term<<endl;
 
@@ -757,7 +752,6 @@ while(true)
                 break;
          default:
                 math_exp.putback(t.kind);
-                //cout<<left<<endl;
                 return left;
 		}
 }
@@ -765,7 +759,6 @@ while(true)
 Token get_token()
 {
 
-    cout<<"here"<<endl;
 
 	char ch;
     math_exp>> ch;
@@ -800,7 +793,7 @@ Token get_token()
             {
                             char ch1;
                             math_exp>>ch1;      //lookahead
-                            if(isalpha(ch1)) //identifier assignment
+                            if(isalpha(ch1)) 
                             {
                             math_exp.putback(ch1);
                             math_exp.putback(ch);
