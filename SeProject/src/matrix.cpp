@@ -13,42 +13,31 @@ matrix::matrix() {
    	 matr=NULL;
 }
 
-matrix::matrix(string s)
-{
-
-	 this->rows=matrix::Getrows(s) ;
-     this->columns=matrix::Getcolumns(s) ;
-     this->s=s;
-   	 mat=matrix::create_matrix(rows,columns);
-   	 mat=matrix::fill_matrix(s, mat, rows, columns);
-
-}
-matrix::matrix(int rows , int columns)
-{
-
-	this->rows =rows;
-	this->columns = columns;
-	mat = matrix::createEmptyMatrix(rows, columns);
-
-}
-
 /*
-void matrix::copy_matrix(matrix &m)
+void matrix::copy_matrix(int rows,int columns,)
 {
+
 this->rows=m.rows;
 this->columns=m.columns;
+
 float** matrix = new float*[rows];
+
 	for (int i = 0; i < rows; i++)
 	{
 		matrix [i] = new float[columns];
+
 		for(int j=0 ;j<columns;j++)
         {
-              matrix[i][j] = m.mat[i][j];
+              matrix[i][j] = m.matr[i][j];
+
         }
 	}
-} */
 
 
+
+}
+
+*/
 matrix::~matrix() {
 	// TODO Auto-generated destructor stub
 }
@@ -75,12 +64,16 @@ int matrix:: Getcolumns(string s)
 		int postion = s.find("[");
 		          // if martrix is empty ... so return columns =0
 		int place=s.find(";");
-
-		s1 = s.substr(postion,place-postion);
+		s1 = s.substr(postion,place-postion+1);
         columns = (count(s1.begin(), s1.end(),' ') + 1);
 
 
+
+
+
+
 		return columns;
+
 }
 
 float** matrix::create_matrix(int rows, int columns)     //MUST initialize all values to zero
@@ -104,6 +97,7 @@ void matrix::destroy_matrix(float** matrix, int rows)
 	}
 
 	delete[] matrix; //delete pointer holding array of pointers;
+    cout<<"matrixs deleted"<<endl;
 }
 
 
@@ -151,16 +145,17 @@ float**matrix::createEmptyMatrix(int rows, int columns)
 	return result;
 }
 
-matrix matrix::sum_matrix(matrix &A, matrix& B)
+float**matrix::sum_matrix(float** A, float** B, int rows, int columns)
 {
 
-	matrix result (B.rows, A.columns);
 
-	for (int i = 0; i < A.rows; i++)
+	float** result = createEmptyMatrix(rows, columns);
+
+	for (int i = 0; i < rows; i++)
 	{
-		for (int j = 0; j < A.columns; j++)
+		for (int j = 0; j < columns; j++)
 		{
-			result.mat[i][j] = A.mat[i][j] + B.mat[i][j];
+			result[i][j] = A[i][j] + B[i][j];
 		}
 	}
 
@@ -169,15 +164,16 @@ matrix matrix::sum_matrix(matrix &A, matrix& B)
 
 
 
-matrix matrix::sub_matrix(matrix &A, matrix& B)
-	{
-        matrix result (A.rows, A.columns);
 
-		for (int i = 0; i < A.rows; i++)
+float** matrix::sub_matrix(float** A, float** B, int rows, int columns)
+	{
+		float** result = createEmptyMatrix(rows, columns);
+
+		for (int i = 0; i < rows; i++)
 		{
-			for (int j = 0; j < A.columns; j++)
+			for (int j = 0; j < columns; j++)
 			{
-				result.mat[i][j] = A.mat[i][j] - B.mat[i][j];
+				result[i][j] = A[i][j] - B[i][j];
 			}
 		}
 
@@ -185,16 +181,16 @@ matrix matrix::sub_matrix(matrix &A, matrix& B)
 	}
 
 
-matrix matrix::multiply_matrix(matrix &A, matrix &B)
+	float** matrix::multiply_matrix(float** A, float** B, int rows, int columns,int n1)
 	{
-		matrix result (A.rows, A.columns);
+		float** result = createEmptyMatrix(rows, columns);
 
-		for (int i = 0; i < A.rows; i++)
+		for (int i = 0; i < rows; i++)
 		{
-			for (int j = 0; j < B.columns; j++)
+			for (int j = 0; j < columns; j++)
 			{
-				for (int k = 0; k < B.rows; k++)
-					result.mat[i][j] += A.mat[i][k] * B.mat[k][j];
+				for (int k = 0; k < n1; k++)
+					result[i][j] += A[i][k] * B[k][j];
 			}
 		}
 
@@ -202,23 +198,21 @@ matrix matrix::multiply_matrix(matrix &A, matrix &B)
 	}
 	//////////////////////////////////partial pivoting/////////////////////////////////////////////////
 
-matrix matrix::partial_pivoting (matrix C ,int rows ,int i)
+float** matrix::partial_pivoting (float ** C ,int rows ,int i)
     {
-
         float dummy ;
 
        for (int k = rows - 1; k > i; k--)
 	   {
-		  if (C.mat[k - 1][i] < C.mat[k][i])
+		  if (C[k - 1][i] < C[k][i])
 		  for (int j = 0; j < rows * 2; j++)
 		  {
-			dummy = C.mat[k][j];
-			C.mat[k][j] = C.mat[k - 1][j];
-			C.mat[k - 1][j] = dummy;
+			dummy = C[k][j];
+			C[k][j] = C[k - 1][j];
+			C[k - 1][j] = dummy;
 		  }
 	    }
-	   return C;
-
+        return C;
      }
 
 float** matrix::division_By_One(float** A ,int rows ,int columns)
@@ -237,93 +231,86 @@ float** matrix::division_By_One(float** A ,int rows ,int columns)
 
 }
 
-matrix matrix::divide_matrix (matrix & A,matrix&B)
+float** matrix::divide_matrix (float** A , float** B , int rows ,int columns,int n1)
 	{
-
-		if(A.rows!=columns ||B.rows!=B.columns||A.rows!=B.rows)
-            {
-                    throw("these two matrices can not be divided , the martix must be squared \n");
-
-            }
 	    ////////creating inverse///////
          int i, j, k;
 	     float r;
 
-		 matrix result(B.rows,B.columns);
-
+		float** result = createEmptyMatrix(rows, columns);
 
               //creating larger matrix
 
-		 matrix C(B.rows, 2 * B.columns);
+		float**  C  = createEmptyMatrix(rows, 2*columns);
 
 		//filling larger matrix
 
-		for ( i=0;i<B.rows;i++)
+		for ( i=0;i<rows;i++)
         {
-            for( j=0 ;j<B.columns;j++)
+            for( j=0 ;j<columns;j++)
             {
-				C.mat[i][j] = B.mat[i][j];
+
+                C[i][j]=B[i][j];
             }
-            for(j= B.columns;j<2*B.columns;j++)
+            for(j= columns;j<2*columns;j++)
             {
-                if (j==i+B.rows)
-                C.mat[i][j]=1; //filling the diagonals of identity matrix with 1
+                if (j==i+rows)
+                C[i][j]=1; //filling the diagonals of identity matrix with 1
 
             }
         }
 
 	//////////////////////////////////diagonal matrix/////////////////////////////////////////////////
 
-	for (i = 0; i < B.rows; i++) //choose pivot element from every row ..row by row and make the following
+	for (i = 0; i < rows; i++) //choose pivot element from every row ..row by row and make the following
 	{
 
-       C=partial_pivoting(C,B.rows,i); //re_arrange the elements below every pivot
+        C=partial_pivoting(C,rows,i); //re_arrange the elements below every pivot
 
-		for (j = 0; j < B.rows ; j++) //iterate over all the rows row by row and make the following
+		for (j = 0; j < rows ; j++) //iterate over all the rows row by row and make the following
 
         if (j != i) //to not include diagonals
 		{
-			r= C.mat[j][i] / C.mat[i][i];
-			//r = C[j][i] / C[i][i]; //[i][i]  eldiagonal ,
+			r = C[j][i] / C[i][i]; //[i][i]  eldiagonal ,
 			//kol row b3mlo nae2s elrow elly fo2 mdroob f elfactor elly ysfre elly 3lgnb
 
 
-			for (k = 0; k < B.rows * 2; k++) //iterate over every column of a specefic row ..element by element and make this operation
-				C.mat[j][k] -= C.mat[i][k] * r;
+			for (k = 0; k < rows * 2; k++) //iterate over every column of a specefic row ..element by element and make this operation
+				C[j][k] -= C[i][k] * r;
         }
 
 	}
 
     //////////////////////////////////unit matrix/////////////////////////////////////////////////
-	for (i = 0; i < B.rows; i++)
+	for (i = 0; i < rows; i++)
 	{
-		r = C.mat[i][i]; //diagonals
-		for (j = 0; j < B.rows * 2; j++)
-			C.mat[i][j] = C.mat[i][j] / r; //hdfy 2ny a5ly eldiagonals bw7aied
+		r = C[i][i]; //diagonals
+		for (j = 0; j < rows * 2; j++)
+			C[i][j] = C[i][j] / r; //hdfy 2ny a5ly eldiagonals bw7aied
 
 	}
 
-	for (i = 0; i < B.rows; i++) //transfer the result
+	for (i = 0; i < rows; i++) //transfer the result
 	{
-		for (j = B.rows; j < B.rows * 2; j++) //5lly balek 2na hna ba5od elgoz2 elly 3lgnb elymin bs
-			result.mat[i][j - B.rows] = C.mat[i][j];
+		for (j = rows; j < rows * 2; j++) //5lly balek 2na hna ba5od elgoz2 elly 3lgnb elymin bs
+			result[i][j - rows] = C[i][j];
 
 	}
 
-	result = multiply_matrix(A, result);
 
-	return result;
+result = multiply_matrix( A, result, rows,columns,n1);
 
 
+return result;
 	}
 
-matrix matrix::Transpose_matrix(matrix &A)
+float**matrix:: Transpose_matrix(float** A, int rows, int columns)
 	{
-		matrix result(A.columns , A.rows);
 
-		for (int i = 0; i < A.rows; i++)
+		float** result = createEmptyMatrix(columns, rows);
+		for (int i = 0; i < rows; i++)
 		{
-			for (int j = 0; j < A.columns; j++)
+			for (int j = 0; j < columns; j++)
 			{
 				result[j][i] = A[i][j];
 			}
@@ -396,13 +383,13 @@ float** matrix::rand_matrix(int rows, int columns)
 
 
 
-matrix matrix::Exponential(matrix &A)
+float** matrix::Exponential(float** A ,int rows ,int columns)
 {
-   matrix result(A.rows, A.columns);
+   float** result = createEmptyMatrix(rows, columns);
 
-		for (int i = 0; i < A.rows; i++)
+		for (int i = 0; i < rows; i++)
 		{
-			for (int j = 0; j < A.columns; j++)
+			for (int j = 0; j < columns; j++)
 			{
 				result[i][j] = exp(A[i][j]);
 
@@ -414,14 +401,14 @@ matrix matrix::Exponential(matrix &A)
 }
 
 
-matrix matrix::Log_Base10(matrix &A ,int &negative_flag)
+float** matrix::Log_Base10(float** A ,int rows ,int columns,int &negative_flag)
 {
   negative_flag=0;
-   matrix result(A.rows, A.columns);
+   float** result = createEmptyMatrix(rows, columns);
 
-		for (int i = 0; i < A.rows; i++)
+		for (int i = 0; i < rows; i++)
 		{
-			for (int j = 0; j < A.columns; j++)
+			for (int j = 0; j < columns; j++)
 			{
 			    if (A[i][j]<0)
                     negative_flag=1;
@@ -435,14 +422,14 @@ matrix matrix::Log_Base10(matrix &A ,int &negative_flag)
 
 }
 
-matrix matrix::Log_Base2(matrix &A, int &negative_flag)
+float** matrix::Log_Base2(float** A ,int rows ,int columns,int &negative_flag)
 {
     negative_flag=0;
-    matrix result(A.rows, B.columns);
+   float** result = createEmptyMatrix(rows, columns);
 
-		for (int i = 0; i < A.rows; i++)
+		for (int i = 0; i < rows; i++)
 		{
-			for (int j = 0; j < A.columns; j++)
+			for (int j = 0; j < columns; j++)
 			{
 			    if (A[i][j]<0)
                     negative_flag=1;
@@ -456,16 +443,16 @@ matrix matrix::Log_Base2(matrix &A, int &negative_flag)
 }
 
 
-matrix matrix::Natural_Log(matrix &A, int &negative_flag)
+float** matrix::Natural_Log(float** A ,int rows ,int columns,int &negative_flag)
 {
   negative_flag=0;
 
-   matrix result(A.rows, A.columns);
+   float** result = createEmptyMatrix(rows, columns);
 
 
-		for (int i = 0; i < A.rows; i++)
+		for (int i = 0; i < rows; i++)
 		{
-			for (int j = 0; j < A.columns; j++)
+			for (int j = 0; j < columns; j++)
 			{
                  if (A[i][j]<0)
                  negative_flag=1;
@@ -564,6 +551,7 @@ float** matrix::SquareRoot(float** A ,int rows ,int columns,int & negative_flag)
 /*float** matrix::Power_the_matrix(float **A,float **B,int rows,int cloumns)
 {
     float** result = createEmptyMatrix(rows, columns);
+
 		for (int i = 0; i < rows; i++)
 		{
 			for (int j = 0; j < columns; j++)
@@ -572,6 +560,7 @@ float** matrix::SquareRoot(float** A ,int rows ,int columns,int & negative_flag)
 					result[i][j] += A[i][k] * B[k][j];
 			}
 		}
+
 		return result;
 }*/
 
@@ -597,3 +586,241 @@ void matrix::print_matrix(float** A, int rows, int columns)
 			printf ("\n");
 		}
 	}
+
+
+
+
+////////////////////////////////////////////
+stringstream math_exp;
+const char num = '1';
+const char opsy='5' ;
+map<string, double >lookup;
+//////////////////////////////////////////////
+void error (string s)
+
+{
+  throw runtime_error (s);
+}
+
+///////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////
+double eval(string k)
+{
+math_exp<<k;
+return expression();
+}
+//////////////////////////////////////////////////
+double factor()
+{
+Token t = get_token();
+double left;
+while(true)
+{
+switch (t.kind)
+{
+case '(':
+{
+        left = expression();
+        t = get_token();if(t.kind!=')'){ error(" missing )");}// should return error here
+        t = get_token();
+        break;
+}
+case '^':
+        left=pow(left,factor());
+        t = get_token();
+        break;
+case '1':
+        left= t.value;
+        t = get_token();
+        break;
+
+case '5':
+        {
+
+                            string s;
+                            char ch=t.alpha;
+                            cout<<t.alpha<<endl;
+                            while(true)
+                            {
+                            s+=ch;
+                            math_exp>>ch;
+                            cout<<s<<endl;
+                            if(s== "sin" )
+                                        {
+                                          double d =expression();
+                                          d=sin(d);
+                                          math_exp>>ch;
+
+                                          return d;
+                                         }
+                            else if (s== "cos" )
+                                             {
+                                            double d =expression();
+                                            cout<<d<<"low"<<endl;
+                                            d=sin(d);
+                                            math_exp>>ch;
+
+                                            return d;
+                                            }
+                            else if (s=="tan" )
+                                        {
+                                          double d =expression();
+                                          cout<<d<<"low"<<endl;
+                                          d=tan(d);
+                                          math_exp>>ch;
+
+                                          return d;
+                                         }
+
+                            else if (s=="log" )
+                                        {
+                                          double d =expression();
+                                          cout<<d<<"low"<<endl;
+                                          d=log(d);
+                                          math_exp>>ch;
+
+                                          return d;
+                                         }
+
+                            else if (s=="sqrt" )
+                                         {
+                                          double d =expression();
+                                          cout<<d<<"low"<<endl;
+                                          d=sqrt(d);
+                                          math_exp>>ch;
+
+                                          return d;
+                                         }
+
+                        }
+                }
+
+
+ default:
+        math_exp.putback(t.kind);
+        return left;
+
+    }
+  }
+ }
+///////////////////////////////////////////////////
+
+//////////////////////////////////////////////////
+double term()
+{
+double left = factor();
+Token t = get_token();
+while (true)
+{
+switch (t.kind)
+{
+case '*':
+        left =left*factor();
+        t = get_token();
+        break;
+case '/':
+        {
+        double d = factor() ;
+        if(d==0) error("division by zero");
+        left =left/ d;
+        t = get_token();
+        break;
+        }
+default:
+        math_exp.putback(t.kind);
+        return left;
+}
+}
+}
+/////////////////////////////////////////////////////
+double expression()
+{
+double left = term();
+Token t = get_token();
+while(true)
+{
+		switch(t.kind)
+		{
+		case '+':
+                cout<<"here5"<<endl;
+                left += term();
+                                cout<<term<<endl;
+
+                t = get_token();
+                break;
+        case '-':
+                left -= term();
+                t = get_token();
+                break;
+         default:
+                math_exp.putback(t.kind);
+                //cout<<left<<endl;
+                return left;
+		}
+}
+}
+Token get_token()
+{
+
+    cout<<"here"<<endl;
+
+	char ch;
+    math_exp>> ch;
+	if (ch== '(') 		return Token(ch);
+	else if (ch== ')')	return Token(ch);
+	else if (ch== '+')	return Token(ch);
+	else if (ch== '-')	return Token(ch);
+	else if (ch== '*')	return Token(ch);
+	else if (ch== '/')	return Token(ch);
+	else if (ch== '%')  return Token(ch);
+ 	else if (ch== '^')	return Token(ch);
+	else if (ch== '=')	return Token(ch);
+    else if(
+      (ch=='.')||
+	  (ch=='0')||
+	  (ch=='1')||
+	  (ch=='2')||
+	  (ch=='3')||
+	  (ch=='4')||
+	  (ch=='5')||
+	  (ch=='6')||
+	  (ch=='7')||
+	  (ch=='8')||
+	  (ch=='9'))
+            {	math_exp.putback(ch);
+                double value;
+                math_exp >> value;
+                return Token(num,value);
+            }
+
+           else if(isalpha(ch))
+            {
+                            char ch1;
+                            math_exp>>ch1;      //lookahead
+                            if(isalpha(ch1)) //identifier assignment
+                            {
+                            math_exp.putback(ch1);
+                            math_exp.putback(ch);
+                            math_exp>>ch;
+                            return Token(ch,opsy);
+                            }
+
+
+                            else // idendtifier is called
+                            {
+                            math_exp.putback(ch);
+                            string k;
+                            k =ch;
+                            double d =lookup[k];
+                            //return Token(k,d);
+                            }
+
+            }
+else
+    return 0;
+}
+
+
