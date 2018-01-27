@@ -233,7 +233,7 @@ string    T2=s2;
 
 
 		printf("The summation result=\n");
-        C = M.sum_matrix(mapped[op.substr(0,1)] , mapped[op.substr(2,1)], m1, n1);
+        C = M.sum_matrix(mapped[op.substr(0,1)] , mapped[op.substr(2,1)]);
 		M.print_matrix(C, m1, n1);
         data.push_back(C);
         mapped[id]=data[i++];
@@ -256,7 +256,7 @@ string    T2=s2;
                 throw("the dimensions are not the same ,can't perform subtracting");
             }
 			printf("The subtraction result=\n");
-            C = M.sub_matrix(mapped[op.substr(0,1)], mapped[op.substr(2,1)], m1, n1);
+            C = M.sub_matrix(mapped[op.substr(0,1)], mapped[op.substr(2,1)]);
 			M.print_matrix(C, m1, n1);
 			data.push_back(C);
 			mapped[id]=data[i++];
@@ -274,7 +274,7 @@ string    T2=s2;
 			    throw ("can't multiply the matrices because the number of columns of the first matrix not equal to the number of rows of the second matrix ");
 		    }
                 printf("The multiplication result=\n");
-                C = M.multiply_matrix(mapped[op.substr(0,1)], mapped[op.substr(2,1)], m1,n2, n1);
+                C = M.multiply_matrix(mapped[op.substr(0,1)], mapped[op.substr(2,1)]);
                 M.print_matrix(C, m1, n2);
                 data.push_back(C);
                 mapped[id]=data[i++];
