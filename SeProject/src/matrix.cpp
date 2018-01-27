@@ -41,7 +41,6 @@ float** matrix = new float*[rows];
 	for (int i = 0; i < rows; i++)
 	{
 		matrix [i] = new float[columns];
-
 		for(int j=0 ;j<columns;j++)
         {
               matrix[i][j] = m.mat[i][j];
@@ -76,11 +75,11 @@ int matrix:: Getcolumns(string s)
 		int postion = s.find("[");
 		          // if martrix is empty ... so return columns =0
 		int place=s.find(";");
-		
+
 		s1 = s.substr(postion,place-postion);
         columns = (count(s1.begin(), s1.end(),' ') + 1);
-	
-	
+
+
 		return columns;
 }
 
@@ -205,7 +204,7 @@ matrix matrix::multiply_matrix(matrix &A, matrix &B)
 
 matrix matrix::partial_pivoting (matrix C ,int rows ,int i)
     {
-		
+
         float dummy ;
 
        for (int k = rows - 1; k > i; k--)
@@ -219,7 +218,7 @@ matrix matrix::partial_pivoting (matrix C ,int rows ,int i)
 		  }
 	    }
 	   return C;
-       
+
      }
 
 float** matrix::division_By_One(float** A ,int rows ,int columns)
@@ -240,7 +239,7 @@ float** matrix::division_By_One(float** A ,int rows ,int columns)
 
 matrix matrix::divide_matrix (matrix & A,matrix&B)
 	{
-    
+
 		if(A.rows!=columns ||B.rows!=B.columns||A.rows!=B.rows)
             {
                     throw("these two matrices can not be divided , the martix must be squared \n");
@@ -252,7 +251,7 @@ matrix matrix::divide_matrix (matrix & A,matrix&B)
 
 		 matrix result(B.rows,B.columns);
 
-		
+
               //creating larger matrix
 
 		 matrix C(B.rows, 2 * B.columns);
@@ -312,19 +311,19 @@ matrix matrix::divide_matrix (matrix & A,matrix&B)
 	}
 
 	result = multiply_matrix(A, result);
-  
+
 	return result;
 
 
 	}
 
-float**matrix:: Transpose_matrix(float** A, int rows, int columns)
+matrix matrix::Transpose_matrix(matrix &A)
 	{
+		matrix result(A.columns , A.rows);
 
-		float** result = createEmptyMatrix(columns, rows);
-		for (int i = 0; i < rows; i++)
+		for (int i = 0; i < A.rows; i++)
 		{
-			for (int j = 0; j < columns; j++)
+			for (int j = 0; j < A.columns; j++)
 			{
 				result[j][i] = A[i][j];
 			}
@@ -397,13 +396,13 @@ float** matrix::rand_matrix(int rows, int columns)
 
 
 
-float** matrix::Exponential(float** A ,int rows ,int columns)
+matrix matrix::Exponential(matrix &A)
 {
-   float** result = createEmptyMatrix(rows, columns);
+   matrix result(A.rows, A.columns);
 
-		for (int i = 0; i < rows; i++)
+		for (int i = 0; i < A.rows; i++)
 		{
-			for (int j = 0; j < columns; j++)
+			for (int j = 0; j < A.columns; j++)
 			{
 				result[i][j] = exp(A[i][j]);
 
@@ -415,14 +414,14 @@ float** matrix::Exponential(float** A ,int rows ,int columns)
 }
 
 
-float** matrix::Log_Base10(float** A ,int rows ,int columns,int &negative_flag)
+matrix matrix::Log_Base10(matrix &A ,int &negative_flag)
 {
   negative_flag=0;
-   float** result = createEmptyMatrix(rows, columns);
+   matrix result(A.rows, A.columns);
 
-		for (int i = 0; i < rows; i++)
+		for (int i = 0; i < A.rows; i++)
 		{
-			for (int j = 0; j < columns; j++)
+			for (int j = 0; j < A.columns; j++)
 			{
 			    if (A[i][j]<0)
                     negative_flag=1;
@@ -436,14 +435,14 @@ float** matrix::Log_Base10(float** A ,int rows ,int columns,int &negative_flag)
 
 }
 
-float** matrix::Log_Base2(float** A ,int rows ,int columns,int &negative_flag)
+matrix matrix::Log_Base2(matrix &A, int &negative_flag)
 {
     negative_flag=0;
-   float** result = createEmptyMatrix(rows, columns);
+    matrix result(A.rows, B.columns);
 
-		for (int i = 0; i < rows; i++)
+		for (int i = 0; i < A.rows; i++)
 		{
-			for (int j = 0; j < columns; j++)
+			for (int j = 0; j < A.columns; j++)
 			{
 			    if (A[i][j]<0)
                     negative_flag=1;
@@ -457,16 +456,16 @@ float** matrix::Log_Base2(float** A ,int rows ,int columns,int &negative_flag)
 }
 
 
-float** matrix::Natural_Log(float** A ,int rows ,int columns,int &negative_flag)
+matrix matrix::Natural_Log(matrix &A, int &negative_flag)
 {
   negative_flag=0;
 
-   float** result = createEmptyMatrix(rows, columns);
+   matrix result(A.rows, A.columns);
 
 
-		for (int i = 0; i < rows; i++)
+		for (int i = 0; i < A.rows; i++)
 		{
-			for (int j = 0; j < columns; j++)
+			for (int j = 0; j < A.columns; j++)
 			{
                  if (A[i][j]<0)
                  negative_flag=1;
@@ -565,7 +564,6 @@ float** matrix::SquareRoot(float** A ,int rows ,int columns,int & negative_flag)
 /*float** matrix::Power_the_matrix(float **A,float **B,int rows,int cloumns)
 {
     float** result = createEmptyMatrix(rows, columns);
-
 		for (int i = 0; i < rows; i++)
 		{
 			for (int j = 0; j < columns; j++)
@@ -574,7 +572,6 @@ float** matrix::SquareRoot(float** A ,int rows ,int columns,int & negative_flag)
 					result[i][j] += A[i][k] * B[k][j];
 			}
 		}
-
 		return result;
 }*/
 
@@ -600,4 +597,3 @@ void matrix::print_matrix(float** A, int rows, int columns)
 			printf ("\n");
 		}
 	}
-
